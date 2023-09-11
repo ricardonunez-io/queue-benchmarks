@@ -6,18 +6,16 @@ if (numTasks < 100) {
     numTasks = 100
 }
 
-let queue = new Array(1000 + numTasks);
-for (let i = 0; i < 1000; i++) {
+let queue = new Array(numTasks);
+for (let i = 0; i < numTasks; i++) {
     queue[i] = 1
 };
 let head = 0;
-let tail = 1000;
 
 async function processQueue() {
     let item = queue[head];
-    head++;
-    queue[tail] = item + 1;
-    tail++
+    queue[head] = item + 1
+    head++
 }
 
 async function main(numTasks) {
@@ -29,5 +27,6 @@ async function main(numTasks) {
 };
 
 main(numTasks);
-console.log(head);
-console.log(queue.length)
+for (let i of queue) {
+  console.log(i)
+}

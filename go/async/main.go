@@ -19,31 +19,24 @@ func main() {
 		numRoutines = 100
 	}
 
-	queue := make([]int, 0, 1000+numRoutines)
-	for i := 0; i < 1000; i++ {
-		queue = append(queue, 1)
+	queue := make(chan int, numRoutines)
+	for i := 0; i < numRoutines; i++ {
+		queue <- 1
 	}
-	head := 0
 
 	var wg sync.WaitGroup
-	var mutex sync.Mutex
 
 	for i := 0; i < numRoutines; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			mutex.Lock()
-
-			item := queue[head]
-			head++
-			queue = append(queue, item)
-
-			mutex.Unlock()
+			item, ok := <-queue
+			if ok {
+				queue <- item + 1
+			}
 		}()
 	}
 
 	wg.Wait()
-
-	log.Println(head)
-	log.Println(len(queue))
+	close(queue)
 }
