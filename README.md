@@ -86,26 +86,26 @@ Here are the results from running GNU Time (`/usr/bin/time -v`) on each language
 |:-----------|:--------|:-------------------|:----------------|:---------------------------------|
 | Go         | Yes     | 100                | 91%             | 3.336                            |
 | Javascript | Yes     | 100                | 85%             | 50.164                           |
-| Go         | No      | 100                | 81%             | 3.352                            |
-| Javascript | No      | 100                | 100%            | 47.656                           |
 | Go         | Yes     | 1,000              | 100%            | 5.398                            |
 | Javascript | Yes     | 1,000              | 74%             | 61.512                           |
-| Go         | No      | 1,000              | 100%            | 3.352                            |
-| Javascript | No      | 1,000              | 90%             | 50.211                           |
 | Go         | Yes     | 10,000             | 88%             | 21.855                           |
 | Javascript | Yes     | 10,000             | 52%             | 65.277                           |
-| Go         | No      | 10,000             | 83%             | 3.355                            |
-| Javascript | No      | 10,000             | 100%            | 54.715                           |
 | Go         | Yes     | 100,000            | 100%            | 87.863                           |
 | Javascript | Yes     | 100,000            | 41%             | 112.918                          |
-| Go         | No      | 100,000            | 86%             | 3.367                            |
-| Javascript | No      | 100,000            | 90%             | 58.684                           |
 | Go         | Yes     | 1,000,000          | 99%             | 180.340                          |
 | Javascript | Yes     | 1,000,000          | 38%             | 429.168                          |
-| Go         | No      | 1,000,000          | 100%            | 11.488                           |
-| Javascript | No      | 1,000,000          | 92%             | 77.320                           |
 | Go         | Yes     | 10,000,000         | 99%             | 359.570                          |
 | Javascript | Yes     | 10,000,000         | 37%             | 1,807.570                        |
+| Go         | No      | 100                | 81%             | 3.352                            |
+| Javascript | No      | 100                | 100%            | 47.656                           |
+| Go         | No      | 1,000              | 100%            | 3.352                            |
+| Javascript | No      | 1,000              | 90%             | 50.211                           |
+| Go         | No      | 10,000             | 83%             | 3.355                            |
+| Javascript | No      | 10,000             | 100%            | 54.715                           |
+| Go         | No      | 100,000            | 86%             | 3.367                            |
+| Javascript | No      | 100,000            | 90%             | 58.684                           |
+| Go         | No      | 1,000,000          | 100%            | 11.488                           |
+| Javascript | No      | 1,000,000          | 92%             | 77.320                           |
 | Go         | No      | 10,000,000         | 93%             | 80.656                           |
 | Javascript | No      | 10,000,000         | 90%             | 139.293                          |
 
@@ -140,26 +140,26 @@ At 10 million, the difference widens again in Go's favor, but having 1 million p
 |:-----------|:------|:-----------------|:----------|:----------|:----------|:------------|:------------|:------------|:-----|
 | Go         | Yes   |              100 | 0.6 ms    | 0.1 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 3.1 ms      | 4161 |
 | Javascript | Yes   |              100 | 13.1 ms   | 0.8 ms    | 6.8 ms    | 6.0 ms      | 11.3 ms     | 16.5 ms     | 213  |
-| Go         | No    |              100 | 0.6 ms    | 0.1 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 2.6 ms      | 4262 |
-| Javascript | No    |              100 | 11.3 ms   | 0.7 ms    | 5.9 ms    | 5.2 ms      | 8.8 ms      | 13.1 ms     | 291  |
 | Go         | Yes   |            1,000 | 1.1 ms    | 0.1 ms    | 0.9 ms    | 0.1 ms      | 0.9 ms      | 3.3 ms      | 2421 |
 | Javascript | Yes   |            1,000 | 22.3 ms   | 1.5 ms    | 15.9 ms   | 6.1 ms      | 17.4 ms     | 27.3 ms     | 152  |
-| Go         | No    |            1,000 | 0.6 ms    | 0.1 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 2.0 ms      | 4493 |
-| Javascript | No    |            1,000 | 11.5 ms   | 0.6 ms    | 5.7 ms    | 5.6 ms      | 10.1 ms     | 13.9 ms     | 269  |
 | Go         | Yes   |           10,000 | 7.9 ms    | 0.4 ms    | 6.4 ms    | 1.4 ms      | 7.5 ms      | 10.6 ms     | 369  |
 | Javascript | Yes   |           10,000 | 40.1 ms   | 1.5 ms    | 30.0 ms   | 9.8 ms      | 36.7 ms     | 42.9 ms     | 72   |
-| Go         | No    |           10,000 | 0.6 ms    | 0.0 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 1.0 ms      | 3985 |
-| Javascript | No    |           10,000 | 15.1 ms   | 0.7 ms    | 9.4 ms    | 5.5 ms      | 13.5 ms     | 16.7 ms     | 193  |
 | Go         | Yes   |          100,000 | 98.2 ms   | 6.7 ms    | 87.7 ms   | 10.1 ms     | 90.1 ms     | 122.1 ms    | 31   |
 | Javascript | Yes   |          100,000 | 117.7 ms  | 2.5 ms    | 94.2 ms   | 23.0 ms     | 112.4 ms    | 125.4 ms    | 25   |
-| Go         | No    |          100,000 | 0.6 ms    | 0.1 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 1.0 ms      | 4055 |
-| Javascript | No    |          100,000 | 18.5 ms   | 1.1 ms    | 12.4 ms   | 5.9 ms      | 15.9 ms     | 22.2 ms     | 179  |
 | Go         | Yes   |        1,000,000 | 756.1 ms  | 21.2 ms   | 727.3 ms  | 27.2 ms     | 711.8 ms    | 793.2 ms    | 10   |
 | Javascript | Yes   |        1,000,000 | 769.8 ms  | 10.6 ms   | 613.5 ms  | 154.6 ms    | 757.0 ms    | 786.2 ms    | 10   |
-| Go         | No    |        1,000,000 | 1.6 ms    | 0.1 ms    | 1.2 ms    | 0.3 ms      | 1.5 ms      | 3.6 ms      | 1734 |
-| Javascript | No    |        1,000,000 | 26.2 ms   | 1.6 ms    | 16.7 ms   | 9.2 ms      | 23.1 ms     | 29.6 ms     | 108  |
 | Go         | Yes   |       10,000,000 | 7.197 s   | 0.079 s   | 7.134 s   | 0.050 s     | 7.077 s     | 7.296 s     | 10   |
 | Javascript | Yes   |       10,000,000 | 8.863 s   | 0.245 s   | 6.089 s   | 2.018 s     | 8.679 s     | 9.442 s     | 10   |
+| Go         | No    |              100 | 0.6 ms    | 0.1 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 2.6 ms      | 4262 |
+| Javascript | No    |              100 | 11.3 ms   | 0.7 ms    | 5.9 ms    | 5.2 ms      | 8.8 ms      | 13.1 ms     | 291  |
+| Go         | No    |            1,000 | 0.6 ms    | 0.1 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 2.0 ms      | 4493 |
+| Javascript | No    |            1,000 | 11.5 ms   | 0.6 ms    | 5.7 ms    | 5.6 ms      | 10.1 ms     | 13.9 ms     | 269  |
+| Go         | No    |           10,000 | 0.6 ms    | 0.0 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 1.0 ms      | 3985 |
+| Javascript | No    |           10,000 | 15.1 ms   | 0.7 ms    | 9.4 ms    | 5.5 ms      | 13.5 ms     | 16.7 ms     | 193  |
+| Go         | No    |          100,000 | 0.6 ms    | 0.1 ms    | 0.5 ms    | 0.1 ms      | 0.5 ms      | 1.0 ms      | 4055 |
+| Javascript | No    |          100,000 | 18.5 ms   | 1.1 ms    | 12.4 ms   | 5.9 ms      | 15.9 ms     | 22.2 ms     | 179  |
+| Go         | No    |        1,000,000 | 1.6 ms    | 0.1 ms    | 1.2 ms    | 0.3 ms      | 1.5 ms      | 3.6 ms      | 1734 |
+| Javascript | No    |        1,000,000 | 26.2 ms   | 1.6 ms    | 16.7 ms   | 9.2 ms      | 23.1 ms     | 29.6 ms     | 108  |
 | Go         | No    |       10,000,000 | 13.6 ms   | 0.5 ms    | 6.7 ms    | 6.7 ms      | 11.9 ms     | 15.5 ms     | 214  |
 | Javascript | No    |       10,000,000 | 65.5 ms   | 1.4 ms    | 51.8 ms   | 13.2 ms     | 62.8 ms     | 68.7 ms     | 45   |
 
