@@ -27,6 +27,3 @@ async function main(numTasks) {
 };
 
 main(numTasks);
-for (let i of queue) {
-  console.log(i)
-}

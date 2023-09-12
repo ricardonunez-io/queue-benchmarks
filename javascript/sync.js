@@ -6,22 +6,18 @@ if (numTasks < 100) {
     numTasks = 100
 }
 
-let queue = new Array(1000 + numTasks);
-for (let i = 0; i < 1000; i++) {
+let queue = new Array(numTasks);
+for (let i = 0; i < numTasks; i++) {
     queue[i] = 1
 };
 let head = 0;
-let tail = 1000;
 
 function main(numTasks) {
     for (let i = 0; i < numTasks; i++) {
         let item = queue[head];
+        queue[head] = item + 1
         head++;
-        queue[tail] = item + 1;
-        tail++
     };
 };
 
 main(numTasks);
-console.log(head);
-console.log(queue.length)

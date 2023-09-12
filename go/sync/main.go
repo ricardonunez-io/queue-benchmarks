@@ -18,17 +18,15 @@ func main() {
 		numRoutines = 100
 	}
 
-	queue := make([]int, 0, 1000+numRoutines)
-	for i := 0; i < 1000; i++ {
+	queue := make([]int, 0, numRoutines)
+	for i := 0; i < numRoutines; i++ {
 		queue = append(queue, 1)
 	}
 	head := 0
 
 	for i := 0; i < numRoutines; i++ {
 		item := queue[head]
+		queue[head] = item + 1
 		head++
-		queue = append(queue, item)
 	}
-	log.Println(head)
-	log.Println(len(queue))
 }
