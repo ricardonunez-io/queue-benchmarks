@@ -57,8 +57,7 @@ git clone https://github.com/ricardonunez-io/queue-benchmarks/
 Then, build the Go binaries:
 
 ```zsh
-cd queue-benchmarks/go/async && go build main.go
-cd queue-benchmarks/go/sync && go build main.go
+cd queue-benchmarks/go/async && go build main.go && cd .. && cd .. && cd queue-benchmarks/go/sync && go build main.go
 ```
 
 Finally, run the tests by `cd`ing back to the `queue-benchmarks` folder and executing `tests.sh` and `memory-tests.sh`, passing in the number of tasks/goroutines you'd like to run per test as the argument, i.e.:
