@@ -72,11 +72,13 @@ Finally, run the tests by `cd`ing back to the `queue-benchmarks` folder and exec
 
 ### Resource Usage
 
-I ran the tests on a 1 core, 2Gb RAM server hosted in [Linode's](https://linode.com) US-East region to both limit any multithreading advantage from Go as well as represent a real world scenario for a realistic—albeit maybe big container's resources.
+I ran the tests on a 1 core, 2Gb RAM server hosted in [Linode's](https://linode.com) US-East region to both limit any multithreading advantage from Go as well as represent a real world scenario for a realistic—albeit maybe big container's resources. I didn't use Docker so as to not overcomplicate things since I was already using a small, 1 core server.
 
-Firstly, resource usage. Speed might seem like an important test, but resource usage on a server tells you a lot about the constraints of a lanaguage, especially if there's bottlenecks that could translate to requests-per-second limits in production, heap out of memory errors, forced server restarts, etc, because my laptop with 12 cores and 64Gb of RAM (+ Philz Coffee) isn't representative of the real world like Cloudflare Workers with their 128Mb memory limit.
+Firstly, resource usage. Speed might seem like an important test, but resource usage on a server tells you a lot about the constraints of a lanaguage, especially if there's bottlenecks that could translate to requests-per-second limits in production, heap out of memory errors, forced server restarts, etc, because my MacBook with 12 cores and 64Gb of RAM (+ Philz Coffee) isn't representative of the real world like Cloudflare Workers with their 128Mb memory limit.
 
-For CPU usage, Bun was typically either neck-and-neck with or beating Go. We'll get to why in a minute, but in terms of memory usage, Go's memory management and compiled nature makes it very difficult for any runtime/interpreter to compete, even one as performant as Bun's.
+For CPU usage, Bun was typically either neck-and-neck with or beating Go, with iterations of 1M and 10M tasks being nearly 3x less CPU intensive than Go. 
+
+We'll get to why in a minute, but in terms of memory usage, Go's memory management and compiled nature makes it very difficult for any runtime/interpreter to compete, even one as performant as Bun's.
 
 Here are the results from running GNU Time (`/usr/bin/time -v`) on each language's async/synchronous program after warming each file's execution up 100 times to prepopulate system caches.
 
