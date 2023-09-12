@@ -17,22 +17,22 @@ It's incredible how succinct the language is given its performance, but just how
 
 The benchmarks themselves are two-fold for each language. 
 
----
-
 ### Async
 
 Firstly, I wanted to test the async capabilities of both language when it comes to data processing in a queue.
 
-> [!NOTE]
-> It's worth noting that for the sake of the benchmark, "async" doesn't mean parallel execution. For CPU-bound tasks, Javascript's event loop doesn't allow for parallel execution without the usage of worker threads, so instead, I simply used `Promise.all()` in JS (which still executes each promise serially) and goroutines & channels in Go (which also execute each concurrent task serially due to channels' locking nature).
+> [!IMPORTANT]
+> It's worth noting that for the sake of the benchmark, "async" doesn't mean parallel execution. For CPU-bound tasks, Javascript's event loop doesn't allow for parallel execution without the usage of worker threads, so instead, I simply used `Promise.all()` in JS (which still executes each promise serially, not in parallel) and goroutines & channels in Go (which, in this case, also execute each concurrent task serially due to the locking nature of channels in the way I used them).
 >
-> If I wanted to test true parallel execution, I would've used a SharedArrayBuffer in Javascript across many worker-threads and a similar channel structure or mutexes in Go, but then dealing with race conditions would've been less fun.
+> This way, I can get as true of a 1:1 comparison as possible between Go and Javascript since Go can perform true parallel execution with goroutines, but that would've been an unfair advantage since serial execution is the design of Javascript, not necessarily a performance bottleneck when comparing execution times.
+>
+> If I wanted to test true parallel execution, I would've used a SharedArrayBuffer in Javascript across many worker-threads and a similar channel structure or mutexes but with random, parallel execution in Go, but then dealing with race conditions would've been less fun.
 
 Both implementations were as close to identical as I could make them, and I tried to limit object creation in Javascript as much as possible (to avoid unnecessary/expensive garbage collection) so as to not give Go an unfair advantage. 
 
-I used pre-allocation for the array to avoid expensive copies of objects, similar to how Go can instantiate a channel/array with a predefined limit.
+I used pre-allocation for the array to avoid expensive copies of objects, similar to how Go can instantiate a channel/array with a predefined size.
 
-As for the benchmark itself, we're going to be testing each language/runtime's ability to concurrently "process" a queue (array in JS/channel in Go) by having each async task/goroutine go through an array, assign a variable to the value of that task number's index in the array, increment the variable, and then replace that same index's value with the incremented variable.
+As for the benchmark itself, we're going to be testing each language/runtime's ability to concurrently "process" a queue (array in JS/channel in Go) by having each async task/goroutine go through an array, assign a variable to the value of that task's index in the array, increment the variable, and then replace that same index's value with the incremented variable.
 
 The channel/array will be of length `n` where `n` is also equal to the number of tasks/goroutines we want to test.
 
@@ -42,15 +42,11 @@ For the synchronous benchmark, the goal was simple. Write a for loop that accomp
 
 The channel/array will also be of length `n` where `n` is equal to the number of tasks/goroutines we want to test.
 
----
-
 ## Testing
 
-To perform the benchmarks, I used [Hyperfine](https://github.com/sharkdp/hyperfine) for the speed tests and [GNU Time](https://www.gnu.org/software/time/) for the resource consumption tests.
+To perform the benchmarks, I used [Hyperfine](https://github.com/sharkdp/hyperfine) for the speed tests and [GNU Time](https://www.gnu.org/software/time/) for the resource consumption tests (I couldn't figure out Valgrind and it scared me).
 
 I ran multiple executions of each program, incrementing the number of tasks/goroutines by 10x each iteration, starting at 100 tasks/goroutines and ending at 10,000,000.
-
-### Execution
 
 To execute the tests, first, clone the repo:
 
@@ -76,9 +72,9 @@ Finally, run the tests by `cd`ing back to the `queue-benchmarks` folder and exec
 
 ### Resource Usage
 
-I ran the tests on a 1 core, 2GB RAM server hosted in [Linode's](https://linode.com) US-East region to both limit any multithreading advantage from Go as well as represent a real world scenario for a realistic—albeit maybe big container's resources.
+I ran the tests on a 1 core, 2Gb RAM server hosted in [Linode's](https://linode.com) US-East region to both limit any multithreading advantage from Go as well as represent a real world scenario for a realistic—albeit maybe big container's resources.
 
-Firstly, resource usage. Speed might seem like an important test, but resource usage on a server tells you a lot about the constraints of a lanaguage, especially if there's bottlenecks that could translate to requests-per-second limits in production, heap out of memory errors, forced server restarts, etc, because my laptop with 18 cores and 64GB of RAM isn't representative of the real world like Cloudflare Workers with their 128Mb memory limit.
+Firstly, resource usage. Speed might seem like an important test, but resource usage on a server tells you a lot about the constraints of a lanaguage, especially if there's bottlenecks that could translate to requests-per-second limits in production, heap out of memory errors, forced server restarts, etc, because my laptop with 12 cores and 64Gb of RAM (+ Philz Coffee) isn't representative of the real world like Cloudflare Workers with their 128Mb memory limit.
 
 For CPU usage, Bun was typically either neck-and-neck with or beating Go. We'll get to why in a minute, but in terms of memory usage, Go's memory management and compiled nature makes it very difficult for any runtime/interpreter to compete, even one as performant as Bun's.
 
@@ -113,7 +109,7 @@ Here are the results from running GNU Time (`/usr/bin/time -v`) on each language
 
 As you can see, for each iteration of the async programs, memory usage is dramatically higher than the synchronous equivalent. 
 
-However, the most important thing to note here is that with the exception of the program ran with 100,000 async tasks where Bun's memory usage is only about 28% higher, Go's memory usage is usually about 2-3x lower than Bun's at 10,000 tasks and above, with the lower iterations being between 12x-16x less memory intensive.
+However, the most important thing to note here is that with the exception of the program ran with 100,000 async tasks where Bun's memory usage is only about 28% higher, Go's memory usage is usually about 2-3x lower than Bun's at 10,000 tasks and above, with the lower iterations using between 12x-16x less memory.
 
 This is a dramatic difference, and running the tests multiple times gave very similar results each time, though I can't say what the statistical significance was on each iteration.
 
@@ -125,7 +121,7 @@ Now, for the speed tests. Here's where the CPU usage really begins to explain it
 
 Given that these programs are, for the most part, CPU-bound due to the fact they are performing computations (incrementing an item that's assigned from an array and then placing it back in the array) more so than waiting on syscalls or performing IO bound tasks, Bun's lower CPU usage can be explained by one thing: speed.
 
-Although it does fair well against Go in terms of speed for IO/syscall based operations like running a web server where JSON serialization of database objects might be the most expensive operation ([Elysia is a great example of how performant this can be in Javascript](https://elysiajs.com)), Go's speed is still much farther ahead of Bun's when it comes to processing instructions efficiently and quickly.
+Although it does fair well against Go in terms of speed for IO/syscall based operations like running a web server where JSON serialization of database objects might be the most expensive operation ([Elysia is a great example of how performant this can be in Javascript](https://elysiajs.com)), Go's speed is still farther ahead of Bun's when it comes to processing instructions efficiently and quickly.
 
 This means Go's CPU usage % will also be higher due to the fact that it's simply processing approximately the same amount of instructions at a quicker rate.
 
@@ -134,7 +130,7 @@ However, Bun's speed is impressive when it hits the same sweet spot of 100k to 1
 At 10 million, the difference widens again in Go's favor, but having 1 million promises run concurrently on a 1 million item array in Javascript and being at essentially the same speed as Go using goroutines is incredibly impressive, and for those running workloads that aren't as memory constrained (i.e. longer running servers or larger containers), this speed is going to make a huge difference when considering Bun as an alternative to Node, along with Bun's very fast startup times.
 
 > [!NOTE]
-> At 1 million promises, the memory overhead was 480Mb, so it still isn't a lean program by any means and will still run out of memory in some cases like in Cloudflare Workers.
+> At 1 million promises, the memory overhead was 480Mb, so it still isn't a lean program by any means and won't work well in execution environments like Cloudflare Workers.
 >
 > Because the memory usage is still quite high compared to Go, you still might run into `heap out of memory` errors if running programs that process this much data.
 
@@ -169,9 +165,9 @@ At 10 million, the difference widens again in Go's favor, but having 1 million p
 
 This benchmark was very insightful into the performance of Bun and getting deeper than just the standard benchmarks we've grown accustomed to of dependency install times, server startup times, etc.
 
-While Go is most likely going to remain the clear option for those building performance critical network/backend services, it's great to see a new contender revolutionizing the Javascript space with performance that *can* rival performance optimized languages in terms of speed even with the overhead of a runtime.
+While Go is most likely going to remain the clear option for those building performance critical network/backend services, it's great to see a new contender revolutionizing the Javascript space with performance that *can* rival performance-optimized languages in terms of speed, even with the overhead of a runtime.
 
-The biggest takeaway I had, however, is to pre-allocate wherever possible, because who knows how Bun would've performed if I had used a dynamic array with no instantiation.
+The biggest takeaway I had, however, is to pre-allocate memory wherever possible, because who knows how Bun would've performed if I had used a dynamic array with no instantiation.
 
 I'm likely going to do this same benchmark but with Bun vs. Node and update this to see how that turns out as well.
 
