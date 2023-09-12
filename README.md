@@ -3,15 +3,15 @@
 
 With the recent release of Bun 1.0, there's been a lot of talk on Twitter about its incredibly impressive performance, as well as how it fares against faster languages like Go.
 
-I'm currently building an application that's incredibly data intensive where each service deals with hundreds of thousands of datapoints per request, with arrays reaching up to millions of elements after serializing to flatbuffers, so I wanted to make a benchmark to see if Bun would fit my use case, since many of the services are already built in Go.
+I'm currently building an application that's incredibly data intensive where each service deals with hundreds of thousands of datapoints per request, with arrays reaching up to millions of elements after serializing to flatbuffers, so I wanted to make a benchmark to see if Bun would fit my use case of efficiently massaging the data I need and aggregating it from a variety of other endpoints/databases, since many of my services are already built in Go.
 
 I'm building the frontend soon, so if I can leverage Javascript for more of the backend, it'll make the rest of development less fragmented for my one person team (of me).
 
 Many of the benchmarks I've seen online have been on IO/syscall intensive tasks where the program isn't CPU or memory bound, so I wanted to create a benchmark more representative of real-world use cases with data transformations among large data objects rather than syscall driven benchmarks like DB retrieval or JSON parsing where Bun is heavily optimized.
 
-Why? Because although Bun is heavily optimized for these kinds of tasks (for example using SIMD for text parsing or JSON parsing), Go can leverage CGo to use simdjson or just use `simdjson-go` or another library to match it, in which case it's a battle of libraries, not languages since Go's JSON parsing doesn't come natively either way (some would argue, though it is part of the stdlib).
+Why? Because although Bun is heavily optimized for these kinds of tasks (i.e. using SIMD for text parsing and JSON parsing), Go can leverage CGo to use simdjson or just use `simdjson-go` or another library to match it, in which case it's a battle of libraries, not languages, though some would argue Bun's parsing is native anyways.
 
-Another note, although Javascript is definitely a wider used language than Go and probably more easy to learn for most people, even with Go's strong typing, the implementations in both languages ended up being almost the exact same amount of code.
+Another note: although Javascript is definitely a wider used language than Go and probably easier to learn for most people, even with Go's strong typing, the implementations in both languages ended up being almost the exact same amount of code.
 
 It's incredible how succinct the language is given its performance, but just how performant is it compared to Javascript ran with Bun? We'll get into it now:
 
