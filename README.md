@@ -81,6 +81,14 @@ We'll get to why in a minute, but in terms of memory usage, Go's memory manageme
 
 Here are the results from running GNU Time (`/usr/bin/time -v`) on each language's async/synchronous program after warming each file's execution up 100 times to prepopulate system caches.
 
+![async-memory](https://github.com/ricardonunez-io/queue-benchmarks/assets/113212961/de1accc5-e8b2-4769-ad36-d52e7ff8de1b)
+![sync-memory](https://github.com/ricardonunez-io/queue-benchmarks/assets/113212961/e5206d1b-6145-457a-a911-6e09b808720b)
+
+<details>
+
+<summary>Click here to see the full table of the data for the resource consumption benchmark.</summary>
+<br/>
+  
 | Language   | Async   | Tasks/Goroutines   | CPU usage (%)   | Maximum Resident Set Size (Mb)   |
 |:-----------|:--------|:-------------------|:----------------|:---------------------------------|
 | Go         | Yes     | 100                | 91%             | 3.336                            |
@@ -107,6 +115,8 @@ Here are the results from running GNU Time (`/usr/bin/time -v`) on each language
 | Javascript | No      | 1,000,000          | 92%             | 77.320                           |
 | Go         | No      | 10,000,000         | 93%             | 80.656                           |
 | Javascript | No      | 10,000,000         | 90%             | 139.293                          |
+
+</details>
 
 As you can see, for each iteration of the async programs, memory usage is dramatically higher than the synchronous equivalent. 
 
@@ -135,6 +145,14 @@ At 10 million, the difference widens again in Go's favor, but having 1 million p
 >
 > Because the memory usage is still quite high compared to Go, you still might run into `heap out of memory` errors if running programs that process this much data.
 
+![async-time](https://github.com/ricardonunez-io/queue-benchmarks/assets/113212961/46d33269-eb35-4e38-a730-538b1732fb07)
+![sync-time](https://github.com/ricardonunez-io/queue-benchmarks/assets/113212961/1f4b11d2-cdc8-4ba3-a1b6-1d790f28f883)
+
+<details>
+  
+  <summary>Click here to see the full table of the data for the speed benchmark.</summary>
+  <br/>
+
 | Language   | Async | Tasks/Goroutines | Mean Time | Std. Dev. | Range (min) | Range (max) | Runs |
 |:-----------|:------|:-----------------|:----------|:----------|:------------|:------------|:-----|
 | Go         | Yes   |              100 | 0.6 ms    | 0.1 ms    | 0.5 ms      | 3.1 ms      | 4161 |
@@ -161,6 +179,8 @@ At 10 million, the difference widens again in Go's favor, but having 1 million p
 | Javascript | No    |        1,000,000 | 26.2 ms   | 1.6 ms    | 23.1 ms     | 29.6 ms     | 108  |
 | Go         | No    |       10,000,000 | 13.6 ms   | 0.5 ms    | 11.9 ms     | 15.5 ms     | 214  |
 | Javascript | No    |       10,000,000 | 65.5 ms   | 1.4 ms    | 62.8 ms     | 68.7 ms     | 45   |
+
+</details>
 
 ## Conclusion
 
